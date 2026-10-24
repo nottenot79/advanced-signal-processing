@@ -1,0 +1,132 @@
+# TP : Signaux Aléatoires — Exercices et Code MATLAB
+
+## 1. Affichage du Bruit Blanc Gaussien
+Énoncé : On s'intéresse au bruit blanc gaussien. Écrire le code MATLAB correspondant à l'affichage de ce bruit pour 1024 points en utilisant la fonction randn.
+
+>> N = 1024;
+>> K = randn(1, N);
+>> plot(K);
+
+---
+
+## 2. Transformée de Fourier Rapide (FFT) et sa Transformée Inverse
+Énoncé : Écrire les instructions pour calculer la Transformée de Fourier Rapide (FFT) d'un signal de 1024 points, ainsi que sa transformée inverse.
+
+>> n = 1024;
+>> k = randn(1, n);
+>> y = fft(k);
+>> z = ifft(y);
+
+---
+
+## 3. Représentation Graphique Simultanée
+Énoncé : Afficher sur un même graphique (deux sous-graphes) le signal original du bruit blanc gaussien et le signal restitué après FFT/IFFT.
+
+>> figure;
+>> subplot(2,1,1);
+>> plot(K, 'r.');
+>> subplot(2,1,2);
+>> plot(X, 'b.');
+
+---
+
+## 4. Estimation de la Densité Spectrale de Puissance (Périodogramme)
+Énoncé : Pour un signal ergodique stationnaire, estimer la moyenne du périodogramme définie par :
+Gamma(v) = E{|X(v)|^2} ~= (1/N) * sum(|Xi(v)|^2)
+
+Écrire le code pour calculer et afficher ce périodogramme.
+
+>> clear;
+>> N = 1024;
+>> K = randn(1, N);
+>> I = 1:N;
+>> S = (1/N) * sum(abs(fft(K(I))).^2);
+
+% Affichage du périodogramme :
+>> D = (1/N) * (abs(fft(K(I))).^2);
+>> plot(D);
+
+---
+
+## 5. Autocorrélation d'un Bruit Blanc Gaussien
+Énoncé : En utilisant la fonction xcorr et en multipliant le bruit blanc gaussien par 0.1, afficher sa fonction d'autocorrélation :
+gamma_x(tau) = E[x(t) * x(t + tau)]
+
+>> clear;
+>> N = 1024;
+>> K = randn(1, N);
+>> Q = 0.1 * K;
+>> A = xcorr(Q);
+>> plot(A);
+
+---
+
+## 6. Analyse Spectrale et Limitée à Ntau
+Énoncé : Déduire la densité spectrale de puissance avec une fenêtre d'autocorrélation définie sur Ntau = 100.
+
+>> Ntau = 100;
+>> [C, tau] = xcorr(K, Ntau);
+>> plot(tau, C);
+
+---
+
+## 7. Calcul des Moments Statistiques (Moyenne, Variance, Écart-type)
+Énoncé : Pour une variable aléatoire discrète x, calculer numériquement :
+- La moyenne : m_x = (1/N) * sum(x_i)
+- La variance : Var_x = E{(x - E{x})^2}
+- L'écart-type : sigma_x = sqrt(Var_x)
+
+>> m = mean(x)
+>> v = var(x)
+>> sigma = std(x)
+
+---
+
+## 8. Estimation de la Densité de Probabilité (Histogramme)
+Énoncé : Tracer la fonction de densité de probabilité estimée du signal en utilisant 100 classes (bins).
+
+>> nbin = 100;
+>> [pxbin, xbin] = hist(x, nbin);
+>> pxbin = pxbin / sum(pxbin) / mean(diff(xbin));
+>> plot(pxbin);
+
+---
+
+## 9. Calcul de la Matrice d'Autocovariance
+Énoncé : Calculer et afficher la matrice de covariance C_{i,j} d'un processus aléatoire.
+
+>> y = randn(nbin, n);
+>> c = cov(y);
+>> plot(y);
+
+---
+
+## 10. Filtrage d'un Bruit Blanc par un Filtre Formeur
+Énoncé : Un signal aléatoire y(t) est généré en passant un bruit blanc x(t) à travers un filtre linéaire du 1er ordre H(s) = 1/(s+a).
+y(t) = h(t) * u(t) avec h(t) = exp(-a*t)*heaviside(t)
+
+Générer le signal de sortie pour a = 2, a = 10 et a = 20.
+
+% Pour a = 2 (S1) :
+N = 1024;
+K = randn(1, N);
+t = 1:100;
+H = exp(-2*t) .* heaviside(t);
+Y = conv(K, H);
+
+% Pour a = 20 (S3) :
+>> R = exp(-20*t) .* heaviside(t);
+>> z = conv(x, R);
+>> plot(z, 'g');
+
+---
+
+## 11. Calcul de la Puissance Moyenne Selon le Paramètre a
+Énoncé : Calculer et comparer la moyenne/puissance du processus aléatoire filtré pour chaque valeur de a.
+
+>> S1 = (1/n) * sum(abs(fft(y(i))).^2)
+>> S2 = (1/n) * sum(abs(fft(o(i))).^2)
+>> S3 = (1/n) * sum(abs(fft(z(i))).^2)
+```eof
+
+You can now click the download button on the file panel to save the `.txt` file directly to your device.
